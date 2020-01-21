@@ -74,6 +74,7 @@ public class ConsumerService {
         final Map<String, Object> userUpdates = new HashMap<>();
 try {
 
+
         final BigDecimal[] gridkwTall = {BigDecimal.ZERO};
         final BigDecimal[] LoadkwTall = {BigDecimal.ZERO};
 
