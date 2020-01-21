@@ -7,6 +7,7 @@ import org.springframework.web.client.RestTemplate;
 import th.co.solar.solarapi.model.WeatherForecast7Days;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -332,9 +333,9 @@ try {
                                                                                             persenpvall[0] = persenpvall[0].add(persenpv);
                                                                                             persensolarall[0] = persensolarall[0].add(persensolar);
 
-                                                                                            persengridall[0] = persengridall[0].divide(group);
-                                                                                            persenpvall[0] = persenpvall[0].divide(group);
-                                                                                            persensolarall[0] = persensolarall[0].divide(group);
+                                                                                            persengridall[0] = persengridall[0].divide(group,1, RoundingMode.HALF_UP);
+                                                                                            persenpvall[0] = persenpvall[0].divide(group,1, RoundingMode.HALF_UP);
+                                                                                            persensolarall[0] = persensolarall[0].divide(group,1, RoundingMode.HALF_UP);
 
                                                                                             isStartRef2s1g1[0] = false;
                                                                                             // ParameterRealtime2S1G2
@@ -386,9 +387,9 @@ try {
                                                                                                         persenpvall[0] = persenpvall[0].add(persenpv);
                                                                                                         persensolarall[0] = persensolarall[0].add(persensolar);
 
-                                                                                                        persengridall[0] = persengridall[0].divide(group);
-                                                                                                        persenpvall[0] = persenpvall[0].divide(group);
-                                                                                                        persensolarall[0] = persensolarall[0].divide(group);
+                                                                                                        persengridall[0] = persengridall[0].divide(group,1, RoundingMode.HALF_UP);
+                                                                                                        persenpvall[0] = persenpvall[0].divide(group,1, RoundingMode.HALF_UP);
+                                                                                                        persensolarall[0] = persensolarall[0].divide(group,1, RoundingMode.HALF_UP);
 
                                                                                                         isStartRef2s1g2[0] = false;
                                                                                                         // ParameterRealtime2S1G3
@@ -440,10 +441,9 @@ try {
                                                                                                                     persenpvall[0] = persenpvall[0].add(persenpv);
                                                                                                                     persensolarall[0] = persensolarall[0].add(persensolar);
 
-                                                                                                                    persengridall[0] = persengridall[0].divide(group);
-                                                                                                                    persenpvall[0] = persenpvall[0].divide(group);
-                                                                                                                    persensolarall[0] = persensolarall[0].divide(group);
-
+                                                                                                                    persengridall[0] = persengridall[0].divide(group,1, RoundingMode.HALF_UP);
+                                                                                                                    persenpvall[0] = persenpvall[0].divide(group,1, RoundingMode.HALF_UP);
+                                                                                                                    persensolarall[0] = persensolarall[0].divide(group,1, RoundingMode.HALF_UP);
 
                                                                                                                     isStartRef2s1g3[0] = false;
                                                                                                                     // ParameterRealtime2S1G4
@@ -495,9 +495,9 @@ try {
                                                                                                                                 persenpvall[0] = persenpvall[0].add(persenpv);
                                                                                                                                 persensolarall[0] = persensolarall[0].add(persensolar);
 
-                                                                                                                                persengridall[0] = persengridall[0].divide(group);
-                                                                                                                                persenpvall[0] = persenpvall[0].divide(group);
-                                                                                                                                persensolarall[0] = persensolarall[0].divide(group);
+                                                                                                                                persengridall[0] = persengridall[0].divide(group,1, RoundingMode.HALF_UP);
+                                                                                                                                persenpvall[0] = persenpvall[0].divide(group,1, RoundingMode.HALF_UP);
+                                                                                                                                persensolarall[0] = persensolarall[0].divide(group,1, RoundingMode.HALF_UP);
 
                                                                                                                                 isStartRef2s1g4[0] = false;
                                                                                                                                 // ParameterRealtime2S1G5
@@ -549,9 +549,9 @@ try {
                                                                                                                                             persenpvall[0] = persenpvall[0].add(persenpv);
                                                                                                                                             persensolarall[0] = persensolarall[0].add(persensolar);
 
-                                                                                                                                            persengridall[0] = persengridall[0].divide(group);
-                                                                                                                                            persenpvall[0] = persenpvall[0].divide(group);
-                                                                                                                                            persensolarall[0] = persensolarall[0].divide(group);
+                                                                                                                                            persengridall[0] = persengridall[0].divide(group,1, RoundingMode.HALF_UP);
+                                                                                                                                            persenpvall[0] = persenpvall[0].divide(group,1, RoundingMode.HALF_UP);
+                                                                                                                                            persensolarall[0] = persensolarall[0].divide(group,1, RoundingMode.HALF_UP);
 
                                                                                                                                             isStartRef2s1g5[0] = false;
                                                                                                                                             // ParameterRealtime2S1G6
@@ -604,9 +604,9 @@ try {
                                                                                                                                                         persenpvall[0] = persenpvall[0].add(persenpv);
                                                                                                                                                         persensolarall[0] = persensolarall[0].add(persensolar);
 
-                                                                                                                                                        persengridall[0] = persengridall[0].divide(group);
-                                                                                                                                                        persenpvall[0] = persenpvall[0].divide(group);
-                                                                                                                                                        persensolarall[0] = persensolarall[0].divide(group);
+                                                                                                                                                        persengridall[0] = persengridall[0].divide(group,1, RoundingMode.HALF_UP);
+                                                                                                                                                        persenpvall[0] = persenpvall[0].divide(group,1, RoundingMode.HALF_UP);
+                                                                                                                                                        persensolarall[0] = persensolarall[0].divide(group,1, RoundingMode.HALF_UP);
 
                                                                                                                                                         isStartRef2s1g6[0] = false;
                                                                                                                                                         // ParameterRealtime3S1G1
