@@ -326,23 +326,16 @@ try {
                                                                                             }
 
                                                                                             solartotalinputall[0] = solartotalinputall[0].add(solartotalinput);
-
                                                                                             solartotaloutputall[0] = solartotaloutputall[0].add(solartotaloutput);
-
-                                                                                            solartotalinputall[0] = solartotalinputall[0].divide(group) ;
-
-                                                                                            solartotaloutputall[0] = solartotaloutputall[0].divide(group) ;
 
                                                                                             persengridall[0] = persengridall[0].add(persengrid);
                                                                                             persenpvall[0] = persenpvall[0].add(persenpv);
                                                                                             persensolarall[0] = persensolarall[0].add(persensolar);
 
+                                                                                            persengridall[0] = persengridall[0].divide(group);
+                                                                                            persenpvall[0] = persenpvall[0].divide(group);
+                                                                                            persensolarall[0] = persensolarall[0].divide(group);
 
-//                                                                                            log.info("solartotalinputs2g1 : {}", solartotalinput);
-//                                                                                            log.info("solartotaloutputs2g1 : {}", solartotaloutput);
-//                                                                                            log.info("persengrids2g1 : {}", persengrid);
-//                                                                                            log.info("persenpvs2g1 : {}", persenpv);
-//                                                                                            log.info("persensolars2g1 : {}", persensolar);
                                                                                             isStartRef2s1g1[0] = false;
                                                                                             // ParameterRealtime2S1G2
                                                                                             ref2s1g2.addValueEventListener(new ValueEventListener() {
@@ -387,16 +380,15 @@ try {
                                                                                                         }
 
                                                                                                         solartotalinputall[0] = solartotalinputall[0].add(solartotalinput);
-
                                                                                                         solartotaloutputall[0] = solartotaloutputall[0].add(solartotaloutput);
-
-                                                                                                        solartotalinputall[0] = solartotalinputall[0].divide(group) ;
-
-                                                                                                        solartotaloutputall[0] = solartotaloutputall[0].divide(group) ;
 
                                                                                                         persengridall[0] = persengridall[0].add(persengrid);
                                                                                                         persenpvall[0] = persenpvall[0].add(persenpv);
                                                                                                         persensolarall[0] = persensolarall[0].add(persensolar);
+
+                                                                                                        persengridall[0] = persengridall[0].divide(group);
+                                                                                                        persenpvall[0] = persenpvall[0].divide(group);
+                                                                                                        persensolarall[0] = persensolarall[0].divide(group);
 
                                                                                                         isStartRef2s1g2[0] = false;
                                                                                                         // ParameterRealtime2S1G3
@@ -442,16 +434,15 @@ try {
                                                                                                                     }
 
                                                                                                                     solartotalinputall[0] = solartotalinputall[0].add(solartotalinput);
-
                                                                                                                     solartotaloutputall[0] = solartotaloutputall[0].add(solartotaloutput);
-
-                                                                                                                    solartotalinputall[0] = solartotalinputall[0].divide(group) ;
-
-                                                                                                                    solartotaloutputall[0] = solartotaloutputall[0].divide(group) ;
 
                                                                                                                     persengridall[0] = persengridall[0].add(persengrid);
                                                                                                                     persenpvall[0] = persenpvall[0].add(persenpv);
                                                                                                                     persensolarall[0] = persensolarall[0].add(persensolar);
+
+                                                                                                                    persengridall[0] = persengridall[0].divide(group);
+                                                                                                                    persenpvall[0] = persenpvall[0].divide(group);
+                                                                                                                    persensolarall[0] = persensolarall[0].divide(group);
 
 
                                                                                                                     isStartRef2s1g3[0] = false;
@@ -498,17 +489,15 @@ try {
                                                                                                                                 }
 
                                                                                                                                 solartotalinputall[0] = solartotalinputall[0].add(solartotalinput);
-
                                                                                                                                 solartotaloutputall[0] = solartotaloutputall[0].add(solartotaloutput);
-
-                                                                                                                                solartotalinputall[0] = solartotalinputall[0].divide(group) ;
-
-                                                                                                                                solartotaloutputall[0] = solartotaloutputall[0].divide(group) ;
 
                                                                                                                                 persengridall[0] = persengridall[0].add(persengrid);
                                                                                                                                 persenpvall[0] = persenpvall[0].add(persenpv);
                                                                                                                                 persensolarall[0] = persensolarall[0].add(persensolar);
 
+                                                                                                                                persengridall[0] = persengridall[0].divide(group);
+                                                                                                                                persenpvall[0] = persenpvall[0].divide(group);
+                                                                                                                                persensolarall[0] = persensolarall[0].divide(group);
 
                                                                                                                                 isStartRef2s1g4[0] = false;
                                                                                                                                 // ParameterRealtime2S1G5
@@ -554,22 +543,16 @@ try {
                                                                                                                                             }
 
                                                                                                                                             solartotalinputall[0] = solartotalinputall[0].add(solartotalinput);
-
                                                                                                                                             solartotaloutputall[0] = solartotaloutputall[0].add(solartotaloutput);
-
-                                                                                                                                            solartotalinputall[0] = solartotalinputall[0].divide(group) ;
-
-                                                                                                                                            solartotaloutputall[0] = solartotaloutputall[0].divide(group) ;
 
                                                                                                                                             persengridall[0] = persengridall[0].add(persengrid);
                                                                                                                                             persenpvall[0] = persenpvall[0].add(persenpv);
                                                                                                                                             persensolarall[0] = persensolarall[0].add(persensolar);
 
-//                                                                                                                                            log.info("solartotalinputs2g1 : {}", solartotalinput);
-//                                                                                                                                            log.info("solartotaloutputs2g1 : {}", solartotaloutput);
-//                                                                                                                                            log.info("persengrids2g1 : {}", persengrid);
-//                                                                                                                                            log.info("persenpvs2g1 : {}", persenpv);
-//                                                                                                                                            log.info("persensolars2g1 : {}", persensolar);
+                                                                                                                                            persengridall[0] = persengridall[0].divide(group);
+                                                                                                                                            persenpvall[0] = persenpvall[0].divide(group);
+                                                                                                                                            persensolarall[0] = persensolarall[0].divide(group);
+
                                                                                                                                             isStartRef2s1g5[0] = false;
                                                                                                                                             // ParameterRealtime2S1G6
                                                                                                                                             ref2s1g6.addValueEventListener(new ValueEventListener() {
@@ -615,16 +598,15 @@ try {
                                                                                                                                                         }
 
                                                                                                                                                         solartotalinputall[0] = solartotalinputall[0].add(solartotalinput);
-
                                                                                                                                                         solartotaloutputall[0] = solartotaloutputall[0].add(solartotaloutput);
-
-                                                                                                                                                        solartotalinputall[0] = solartotalinputall[0].divide(group) ;
-
-                                                                                                                                                        solartotaloutputall[0] = solartotaloutputall[0].divide(group) ;
 
                                                                                                                                                         persengridall[0] = persengridall[0].add(persengrid);
                                                                                                                                                         persenpvall[0] = persenpvall[0].add(persenpv);
                                                                                                                                                         persensolarall[0] = persensolarall[0].add(persensolar);
+
+                                                                                                                                                        persengridall[0] = persengridall[0].divide(group);
+                                                                                                                                                        persenpvall[0] = persenpvall[0].divide(group);
+                                                                                                                                                        persensolarall[0] = persensolarall[0].divide(group);
 
                                                                                                                                                         isStartRef2s1g6[0] = false;
                                                                                                                                                         // ParameterRealtime3S1G1
