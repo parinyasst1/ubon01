@@ -23,7 +23,12 @@ public class QueueScheduler {
     @Scheduled(cron = "${queue.interval-cron}", zone="Asia/Bangkok")
     public void execute() {
         if (enable) {
-            consumerService.processQueueTotal();
+            try {
+                consumerService.processQueueTotal();
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 

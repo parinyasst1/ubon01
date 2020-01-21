@@ -18,9 +18,19 @@ public class ProcessController {
     @Autowired
     ConsumerService consumerService;
 
+    @GetMapping(value = "/processQueueTest", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Object>> processQueueTest() {
+        return ResponseEntity.ok(consumerService.processQueueTest());
+    }
+
     @GetMapping(value = "/processQueueTotal", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> processQueueTotal() {
-        return ResponseEntity.ok(consumerService.processQueueTotal());
+        try {
+            return ResponseEntity.ok(consumerService.processQueueTotal());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.ok(null);
+        }
     }
 
 }

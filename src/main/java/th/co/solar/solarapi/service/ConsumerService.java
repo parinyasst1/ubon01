@@ -1,17 +1,12 @@
 package th.co.solar.solarapi.service;
 
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import th.co.solar.solarapi.model.WeatherForecast7Days;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.text.ParseException;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,25 +15,78 @@ import java.util.Map;
 @Slf4j
 public class ConsumerService {
 
+    public Map<String, Object> processQueueTest() {
+        // Get a reference to our posts
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference refTotal = database.getReference("ParameterTotalS1");
+
+        DatabaseReference ref1s1g1 = database.getReference("ParameterRealtime1S1G1");
+
+        ref1s1g1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                log.info("onDataChange : {}",dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        return null;
+    }
+
+    public BigDecimal convertObjectToBigDecimal(Object object){
+        BigDecimal result = BigDecimal.ZERO;
+        if(object instanceof String){
+            result = new BigDecimal((String)object);
+        }else if(object instanceof Long){
+            result = new BigDecimal((Long)object);
+        }
+        return result;
+    }
+
     public Map<String, Object> processQueueTotal() {
         log.info("Start processQueueTotal at {}", new Date());
-        final boolean[] isStart = {true};
+        final boolean[] isStartRef1s1g1 = {true};
+        final boolean[] isStartRef1s1g2 = {true};
+        final boolean[] isStartRef1s1g3 = {true};
+        final boolean[] isStartRef1s1g4 = {true};
+        final boolean[] isStartRef1s1g5 = {true};
+        final boolean[] isStartRef1s1g6 = {true};
+
+        final boolean[] isStartRef2s1g1 = {true};
+        final boolean[] isStartRef2s1g2 = {true};
+        final boolean[] isStartRef2s1g3 = {true};
+        final boolean[] isStartRef2s1g4 = {true};
+        final boolean[] isStartRef2s1g5 = {true};
+        final boolean[] isStartRef2s1g6 = {true};
+
+        final boolean[] isStartRef3s1g1 = {true};
+        final boolean[] isStartRef3s1g2 = {true};
+        final boolean[] isStartRef3s1g3 = {true};
+        final boolean[] isStartRef3s1g4 = {true};
+        final boolean[] isStartRef3s1g5 = {true};
+        final boolean[] isStartRef3s1g6 = {true};
+
+
         final Map<String, Object> userUpdates = new HashMap<>();
 try {
 
-        final Long[] gridkwTall = {0L};
-        final Long[] LoadkwTall = {0L};
+        final BigDecimal[] gridkwTall = {BigDecimal.ZERO};
+        final BigDecimal[] LoadkwTall = {BigDecimal.ZERO};
 
-        final Long[] solartotalinputall = {0L};
-        final Long[] solartotaloutputall = {0L};
-        final Long[] persengridall = {0L};
-        final Long[] persenpvall = {0L};
-        final Long[] persensolarall = {0L};
+        final BigDecimal[] solartotalinputall = {BigDecimal.ZERO};
+        final BigDecimal[] solartotaloutputall = {BigDecimal.ZERO};
+        final BigDecimal[] persengridall = {BigDecimal.ZERO};
+        final BigDecimal[] persenpvall = {BigDecimal.ZERO};
+        final BigDecimal[] persensolarall = {BigDecimal.ZERO};
 
-        final Long[] griduseall = {0L};
-        final Long[] loadall = {0L};
-        final Long[] solartotalinputaccall = {0L};
-        final Long[] solartotaloutputaccall = {0L};
+        final BigDecimal[] griduseall = {BigDecimal.ZERO};
+        final BigDecimal[] loadall = {BigDecimal.ZERO};
+        final BigDecimal[] solartotalinputaccall = {BigDecimal.ZERO};
+        final BigDecimal[] solartotaloutputaccall = {BigDecimal.ZERO};
 
         // Get a reference to our posts
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -69,794 +117,745 @@ try {
         ref1s1g1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-//                log.info("isStart[0] : {}",isStart[0]);
-                if(dataSnapshot.exists() && isStart[0]){
+//                log.info("isStartRef1s1g1 : {}",isStartRef1s1g1[0]);
+//                log.info("dataSnapshot.exists : {}",dataSnapshot.exists());
+                if(dataSnapshot.exists() && isStartRef1s1g1[0]){
                     HashMap<String,HashMap> hashMapData = (HashMap<String,HashMap>) dataSnapshot.getValue();
                     Object obj = hashMapData.get("DataRealtime1S1G1");
                     if (obj == null) {
                         return;
                     }
                     HashMap dataMap = (HashMap) obj;
-                    Long gridkwT = 0L;
-                    Long LoadkwT = 0L;
+                    BigDecimal gridkwT = BigDecimal.ZERO;
+                    BigDecimal LoadkwT = BigDecimal.ZERO;
                     Object gridkwT_obj = dataMap.get("gridkwT");
                     if(gridkwT_obj != null){
-                        gridkwT = (Long)gridkwT_obj;
+                        gridkwT = convertObjectToBigDecimal(gridkwT_obj);
                     }
                     Object LoadkwT_obj = dataMap.get("LoadkwT");
                     if(LoadkwT_obj != null){
-                        LoadkwT = Long.valueOf((String)LoadkwT_obj);
+                        LoadkwT = convertObjectToBigDecimal(LoadkwT_obj);
                     }
 //                    log.info("gridkwTs1g1 : {}", gridkwT);
 //                    log.info("LoadkwTs1g1 : {}", LoadkwT);
 
-                    gridkwTall[0] += gridkwT;
-                    LoadkwTall[0] += LoadkwT;
-
+                    gridkwTall[0] = gridkwTall[0].add(gridkwT);
+                    LoadkwTall[0] = LoadkwTall[0].add(LoadkwT);
+                    isStartRef1s1g1[0] = false;
                     // ParameterRealtime1S1G2
                     ref1s1g2.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.exists() && isStart[0]){
+//                            log.info("isStartRef1s1g2 : {}",isStartRef1s1g2[0]);
+                            if(dataSnapshot.exists() && isStartRef1s1g2[0]){
                                 HashMap<String,HashMap> hashMapData = (HashMap<String,HashMap>) dataSnapshot.getValue();
                                 Object obj = hashMapData.get("DataRealtime1S1G2");
                                 if (obj == null) {
                                     return;
                                 }
                                 HashMap dataMap = (HashMap) obj;
-                                Long gridkwT = 0L;
-                                Long LoadkwT = 0L;
+                                BigDecimal gridkwT = BigDecimal.ZERO;
+                                BigDecimal LoadkwT = BigDecimal.ZERO;
+
                                 Object gridkwT_obj = dataMap.get("gridkwT");
                                 if(gridkwT_obj != null){
-                                    gridkwT = (Long)gridkwT_obj;
+                                    gridkwT = convertObjectToBigDecimal(gridkwT_obj);
                                 }
                                 Object LoadkwT_obj = dataMap.get("LoadkwT");
                                 if(LoadkwT_obj != null){
-                                    LoadkwT = Long.valueOf((String)LoadkwT_obj);
+                                    LoadkwT = convertObjectToBigDecimal(LoadkwT_obj);
                                 }
 //                                log.info("gridkwTs1g2 : {}", gridkwT);
 //                                log.info("LoadkwTs1g2 : {}", LoadkwT);
 
-                                gridkwTall[0] += gridkwT;
-                                LoadkwTall[0] += LoadkwT;
-
+                                gridkwTall[0] = gridkwTall[0].add(gridkwT);
+                                LoadkwTall[0] = LoadkwTall[0].add(LoadkwT);
+                                isStartRef1s1g2[0] = false;
                                 // ParameterRealtime1S1G3
                                 ref1s1g3.addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        if(dataSnapshot.exists() && isStart[0]){
+                                        if(dataSnapshot.exists() && isStartRef1s1g3[0]){
                                             HashMap<String,HashMap> hashMapData = (HashMap<String,HashMap>) dataSnapshot.getValue();
                                             Object obj = hashMapData.get("DataRealtime1S1G3");
                                             if (obj == null) {
                                                 return;
                                             }
                                             HashMap dataMap = (HashMap) obj;
-                                            Long gridkwT = 0L;
-                                            Long LoadkwT = 0L;
+                                            BigDecimal gridkwT = BigDecimal.ZERO;
+                                            BigDecimal LoadkwT = BigDecimal.ZERO;
                                             Object gridkwT_obj = dataMap.get("gridkwT");
                                             if(gridkwT_obj != null){
-                                                gridkwT = (Long)gridkwT_obj;
+                                                gridkwT = convertObjectToBigDecimal(gridkwT_obj);
                                             }
                                             Object LoadkwT_obj = dataMap.get("LoadkwT");
                                             if(LoadkwT_obj != null){
-                                                LoadkwT = Long.valueOf((String)LoadkwT_obj);
+                                                LoadkwT = convertObjectToBigDecimal(LoadkwT_obj);
                                             }
 //                                            log.info("gridkwTs1g3 : {}", gridkwT);
 //                                            log.info("LoadkwTs1g3 : {}", LoadkwT);
 
-                                            gridkwTall[0] += gridkwT;
-                                            LoadkwTall[0] += LoadkwT;
-
+                                            gridkwTall[0] = gridkwTall[0].add(gridkwT);
+                                            LoadkwTall[0] = LoadkwTall[0].add(LoadkwT);
+                                            isStartRef1s1g3[0] = false;
                                             // ParameterRealtime1S1G4
                                             ref1s1g4.addValueEventListener(new ValueEventListener() {
                                                 @Override
                                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                                    if(dataSnapshot.exists() && isStart[0]){
+                                                    if(dataSnapshot.exists() && isStartRef1s1g4[0]){
                                                         HashMap<String,HashMap> hashMapData = (HashMap<String,HashMap>) dataSnapshot.getValue();
                                                         Object obj = hashMapData.get("DataRealtime1S1G4");
                                                         if (obj == null) {
                                                             return;
                                                         }
                                                         HashMap dataMap = (HashMap) obj;
-                                                        Long gridkwT = 0L;
-                                                        Long LoadkwT = 0L;
+                                                        BigDecimal gridkwT = BigDecimal.ZERO;
+                                                        BigDecimal LoadkwT = BigDecimal.ZERO;
                                                         Object gridkwT_obj = dataMap.get("gridkwT");
                                                         if(gridkwT_obj != null){
-                                                            gridkwT = (Long)gridkwT_obj;
+                                                            gridkwT = convertObjectToBigDecimal(gridkwT_obj);
                                                         }
                                                         Object LoadkwT_obj = dataMap.get("LoadkwT");
                                                         if(LoadkwT_obj != null){
-                                                            LoadkwT = Long.valueOf((String)LoadkwT_obj);
+                                                            LoadkwT = convertObjectToBigDecimal(LoadkwT_obj);
                                                         }
 //                                                        log.info("gridkwTs1g4 : {}", gridkwT);
 //                                                        log.info("LoadkwTs1g4 : {}", LoadkwT);
 
-                                                        gridkwTall[0] += gridkwT;
-                                                        LoadkwTall[0] += LoadkwT;
-
+                                                        gridkwTall[0] = gridkwTall[0].add(gridkwT);
+                                                        LoadkwTall[0] = LoadkwTall[0].add(LoadkwT);
+                                                        isStartRef1s1g4[0] = false;
                                                         // ParameterRealtime1S1G5
                                                         ref1s1g5.addValueEventListener(new ValueEventListener() {
                                                             @Override
                                                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                if(dataSnapshot.exists() && isStart[0]){
+                                                                if(dataSnapshot.exists() && isStartRef1s1g5[0]){
                                                                     HashMap<String,HashMap> hashMapData = (HashMap<String,HashMap>) dataSnapshot.getValue();
                                                                     Object obj = hashMapData.get("DataRealtime1S1G5");
                                                                     if (obj == null) {
                                                                         return;
                                                                     }
                                                                     HashMap dataMap = (HashMap) obj;
-                                                                    Long gridkwT = 0L;
-                                                                    Long LoadkwT = 0L;
+                                                                    BigDecimal gridkwT = BigDecimal.ZERO;
+                                                                    BigDecimal LoadkwT = BigDecimal.ZERO;
                                                                     Object gridkwT_obj = dataMap.get("gridkwT");
                                                                     if(gridkwT_obj != null){
-                                                                        gridkwT = (Long)gridkwT_obj;
+                                                                        gridkwT = convertObjectToBigDecimal(gridkwT_obj);
                                                                     }
                                                                     Object LoadkwT_obj = dataMap.get("LoadkwT");
                                                                     if(LoadkwT_obj != null){
-                                                                        LoadkwT = Long.valueOf((String)LoadkwT_obj);
+                                                                        LoadkwT = convertObjectToBigDecimal(LoadkwT_obj);
                                                                     }
 //                                                                    log.info("gridkwTs1g5 : {}", gridkwT);
 //                                                                    log.info("LoadkwTs1g5 : {}", LoadkwT);
 
-                                                                    gridkwTall[0] += gridkwT;
-                                                                    LoadkwTall[0] += LoadkwT;
-
+                                                                    gridkwTall[0] = gridkwTall[0].add(gridkwT);
+                                                                    LoadkwTall[0] = LoadkwTall[0].add(LoadkwT);
+                                                                    isStartRef1s1g5[0] = false;
                                                                     // ParameterRealtime1S1G6
                                                                     ref1s1g6.addValueEventListener(new ValueEventListener() {
                                                                         @Override
                                                                         public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                            if(dataSnapshot.exists() && isStart[0]){
+                                                                            if(dataSnapshot.exists() && isStartRef1s1g6[0]){
                                                                                 HashMap<String,HashMap> hashMapData = (HashMap<String,HashMap>) dataSnapshot.getValue();
                                                                                 Object obj = hashMapData.get("DataRealtime1S1G6");
                                                                                 if (obj == null) {
                                                                                     return;
                                                                                 }
                                                                                 HashMap dataMap = (HashMap) obj;
-                                                                                Long gridkwT = 0L;
-                                                                                Long LoadkwT = 0L;
+                                                                                BigDecimal gridkwT = BigDecimal.ZERO;
+                                                                                BigDecimal LoadkwT = BigDecimal.ZERO;
                                                                                 Object gridkwT_obj = dataMap.get("gridkwT");
                                                                                 if(gridkwT_obj != null){
-                                                                                    gridkwT = (Long)gridkwT_obj;
+                                                                                    gridkwT = convertObjectToBigDecimal(gridkwT_obj);
                                                                                 }
                                                                                 Object LoadkwT_obj = dataMap.get("LoadkwT");
                                                                                 if(LoadkwT_obj != null){
-                                                                                    LoadkwT = Long.valueOf((String)LoadkwT_obj);
+                                                                                    LoadkwT = convertObjectToBigDecimal(LoadkwT_obj);
                                                                                 }
 //                                                                                log.info("gridkwTs1g6 : {}", gridkwT);
 //                                                                                log.info("LoadkwTs1g6 : {}", LoadkwT);
 
-                                                                                gridkwTall[0] += gridkwT;
-                                                                                LoadkwTall[0] += LoadkwT;
-
+                                                                                gridkwTall[0] = gridkwTall[0].add(gridkwT);
+                                                                                LoadkwTall[0] = LoadkwTall[0].add(LoadkwT);
 
 //                                                                                log.info("gridkwTall : {}", gridkwTall[0]);
 //                                                                                log.info("LoadkwTall : {}", LoadkwTall[0]);
-
+                                                                                isStartRef1s1g6[0] = false;
                                                                                 // ParameterRealtime2S1G1
                                                                                 ref2s1g1.addValueEventListener(new ValueEventListener() {
                                                                                     @Override
                                                                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                                        if(dataSnapshot.exists() && isStart[0]){
+                                                                                        if(dataSnapshot.exists() && isStartRef2s1g1[0]){
                                                                                             HashMap<String,HashMap> hashMapData = (HashMap<String,HashMap>) dataSnapshot.getValue();
                                                                                             Object obj = hashMapData.get("DataRealtime2S1G1");
                                                                                             if (obj == null) {
                                                                                                 return;
                                                                                             }
-                                                                                            Long group = 0L;
+                                                                                            BigDecimal group = BigDecimal.ZERO;
                                                                                             Object group_obj = hashMapData.get("group");
                                                                                             if (group_obj != null) {
-                                                                                                group = Long.valueOf((String)group_obj);
-                                                                                                if(group == 0){
-                                                                                                    group = 1L;
-                                                                                                }
+                                                                                                group = convertObjectToBigDecimal(group_obj);
                                                                                             }
                                                                                             HashMap dataMap = (HashMap) obj;
-                                                                                            Long solartotalinput = 0L;
-                                                                                            Long solartotaloutput = 0L;
-                                                                                            Long persengrid = 0L;
-                                                                                            Long persenpv = 0L;
-                                                                                            Long persensolar = 0L;
+                                                                                            BigDecimal solartotalinput = BigDecimal.ZERO;
+                                                                                            BigDecimal solartotaloutput = BigDecimal.ZERO;
+                                                                                            BigDecimal persengrid = BigDecimal.ZERO;
+                                                                                            BigDecimal persenpv = BigDecimal.ZERO;
+                                                                                            BigDecimal persensolar = BigDecimal.ZERO;
                                                                                             Object solartotalinput_obj = dataMap.get("solartotalinput");
                                                                                             if(solartotalinput_obj != null){
-                                                                                                solartotalinput = Long.valueOf((String)solartotalinput_obj);
+                                                                                                solartotalinput = convertObjectToBigDecimal(solartotalinput_obj);
                                                                                             }
                                                                                             Object solartotaloutput_obj = dataMap.get("solartotaloutput");
                                                                                             if(solartotaloutput_obj != null){
-                                                                                                solartotaloutput = Long.valueOf((String)solartotaloutput_obj);
+                                                                                                solartotaloutput = convertObjectToBigDecimal(solartotaloutput_obj);
                                                                                             }
                                                                                             Object persengrid_obj = dataMap.get("persengrid");
                                                                                             if(solartotaloutput_obj != null){
-                                                                                                persengrid = Long.valueOf((String)persengrid_obj);
+                                                                                                persengrid = convertObjectToBigDecimal(persengrid_obj);
                                                                                             }
                                                                                             Object persenpv_obj = dataMap.get("persenpv");
                                                                                             if(persenpv_obj != null){
-                                                                                                persenpv = Long.valueOf((String)persenpv_obj);
+                                                                                                persenpv = convertObjectToBigDecimal(persenpv_obj);
                                                                                             }
                                                                                             Object persensolar_obj = dataMap.get("persensolar");
                                                                                             if(persensolar_obj != null){
-                                                                                                persensolar = Long.valueOf((String)persensolar_obj);
+                                                                                                persensolar = convertObjectToBigDecimal(persensolar_obj);
                                                                                             }
+
+                                                                                            solartotalinputall[0] = solartotalinputall[0].add(solartotalinput);
+
+                                                                                            solartotaloutputall[0] = solartotaloutputall[0].add(solartotaloutput);
+
+                                                                                            solartotalinputall[0] = solartotalinputall[0].divide(group) ;
+
+                                                                                            solartotaloutputall[0] = solartotaloutputall[0].divide(group) ;
+
+                                                                                            persengridall[0] = persengridall[0].add(persengrid);
+                                                                                            persenpvall[0] = persenpvall[0].add(persenpv);
+                                                                                            persensolarall[0] = persensolarall[0].add(persensolar);
+
+
 //                                                                                            log.info("solartotalinputs2g1 : {}", solartotalinput);
 //                                                                                            log.info("solartotaloutputs2g1 : {}", solartotaloutput);
 //                                                                                            log.info("persengrids2g1 : {}", persengrid);
 //                                                                                            log.info("persenpvs2g1 : {}", persenpv);
 //                                                                                            log.info("persensolars2g1 : {}", persensolar);
-
-                                                                                            solartotalinputall[0] += solartotalinput;
-                                                                                            solartotalinputall[0] = solartotalinputall[0] / group;
-                                                                                            solartotaloutputall[0] += solartotaloutput;
-                                                                                            solartotaloutputall[0] = solartotaloutputall[0] / group;
-                                                                                            persengridall[0] += persengrid;
-                                                                                            persenpvall[0] += persenpv;
-                                                                                            persensolarall[0] += persensolar;
-
-
+                                                                                            isStartRef2s1g1[0] = false;
                                                                                             // ParameterRealtime2S1G2
                                                                                             ref2s1g2.addValueEventListener(new ValueEventListener() {
                                                                                                 @Override
                                                                                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                                                    if(dataSnapshot.exists() && isStart[0]){
+                                                                                                    if(dataSnapshot.exists() && isStartRef2s1g2[0]){
                                                                                                         HashMap<String,HashMap> hashMapData = (HashMap<String,HashMap>) dataSnapshot.getValue();
                                                                                                         Object obj = hashMapData.get("DataRealtime2S1G2");
                                                                                                         if (obj == null) {
                                                                                                             return;
                                                                                                         }
-                                                                                                        Long group = 0L;
+                                                                                                        BigDecimal group = BigDecimal.ZERO;
                                                                                                         Object group_obj = hashMapData.get("group");
                                                                                                         if (group_obj != null) {
-                                                                                                            group = Long.valueOf((String)group_obj);
-                                                                                                            if(group == 0){
-                                                                                                                group = 1L;
-                                                                                                            }
+                                                                                                            group = convertObjectToBigDecimal(group_obj);
                                                                                                         }
                                                                                                         HashMap dataMap = (HashMap) obj;
-                                                                                                        Long solartotalinput = 0L;
-                                                                                                        Long solartotaloutput = 0L;
-                                                                                                        Long persengrid = 0L;
-                                                                                                        Long persenpv = 0L;
-                                                                                                        Long persensolar = 0L;
+                                                                                                        BigDecimal solartotalinput = BigDecimal.ZERO;
+                                                                                                        BigDecimal solartotaloutput = BigDecimal.ZERO;
+                                                                                                        BigDecimal persengrid = BigDecimal.ZERO;
+                                                                                                        BigDecimal persenpv = BigDecimal.ZERO;
+                                                                                                        BigDecimal persensolar = BigDecimal.ZERO;
                                                                                                         Object solartotalinput_obj = dataMap.get("solartotalinput");
                                                                                                         if(solartotalinput_obj != null){
-                                                                                                            solartotalinput = Long.valueOf((String)solartotalinput_obj);
+                                                                                                            solartotalinput = convertObjectToBigDecimal(solartotalinput_obj);
                                                                                                         }
                                                                                                         Object solartotaloutput_obj = dataMap.get("solartotaloutput");
                                                                                                         if(solartotaloutput_obj != null){
-                                                                                                            solartotaloutput = Long.valueOf((String)solartotaloutput_obj);
+                                                                                                            solartotaloutput = convertObjectToBigDecimal(solartotaloutput_obj);
                                                                                                         }
                                                                                                         Object persengrid_obj = dataMap.get("persengrid");
                                                                                                         if(solartotaloutput_obj != null){
-                                                                                                            persengrid = Long.valueOf((String)persengrid_obj);
+                                                                                                            persengrid = convertObjectToBigDecimal(persengrid_obj);
                                                                                                         }
                                                                                                         Object persenpv_obj = dataMap.get("persenpv");
                                                                                                         if(persenpv_obj != null){
-                                                                                                            persenpv = Long.valueOf((String)persenpv_obj);
+                                                                                                            persenpv = convertObjectToBigDecimal(persenpv_obj);
                                                                                                         }
                                                                                                         Object persensolar_obj = dataMap.get("persensolar");
                                                                                                         if(persensolar_obj != null){
-                                                                                                            persensolar = Long.valueOf((String)persensolar_obj);
+                                                                                                            persensolar = convertObjectToBigDecimal(persensolar_obj);
                                                                                                         }
-//                                                                                                        log.info("solartotalinputs2g2 : {}", solartotalinput);
-//                                                                                                        log.info("solartotaloutputs2g2 : {}", solartotaloutput);
-//                                                                                                        log.info("persengrids2g2 : {}", persengrid);
-//                                                                                                        log.info("persenpvs2g2 : {}", persenpv);
-//                                                                                                        log.info("persensolars2g2 : {}", persensolar);
 
-                                                                                                        solartotalinputall[0] += solartotalinput;
-                                                                                                        solartotalinputall[0] = solartotalinputall[0] / group;
-                                                                                                        solartotaloutputall[0] += solartotaloutput;
-                                                                                                        solartotaloutputall[0] = solartotaloutputall[0] / group;
-                                                                                                        persengridall[0] += persengrid;
-                                                                                                        persenpvall[0] += persenpv;
-                                                                                                        persensolarall[0] += persensolar;
+                                                                                                        solartotalinputall[0] = solartotalinputall[0].add(solartotalinput);
 
+                                                                                                        solartotaloutputall[0] = solartotaloutputall[0].add(solartotaloutput);
 
+                                                                                                        solartotalinputall[0] = solartotalinputall[0].divide(group) ;
+
+                                                                                                        solartotaloutputall[0] = solartotaloutputall[0].divide(group) ;
+
+                                                                                                        persengridall[0] = persengridall[0].add(persengrid);
+                                                                                                        persenpvall[0] = persenpvall[0].add(persenpv);
+                                                                                                        persensolarall[0] = persensolarall[0].add(persensolar);
+
+                                                                                                        isStartRef2s1g2[0] = false;
                                                                                                         // ParameterRealtime2S1G3
                                                                                                         ref2s1g3.addValueEventListener(new ValueEventListener() {
                                                                                                             @Override
                                                                                                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                                                                if(dataSnapshot.exists() && isStart[0]){
+                                                                                                                if(dataSnapshot.exists() && isStartRef2s1g3[0]){
                                                                                                                     HashMap<String,HashMap> hashMapData = (HashMap<String,HashMap>) dataSnapshot.getValue();
                                                                                                                     Object obj = hashMapData.get("DataRealtime2S1G3");
                                                                                                                     if (obj == null) {
                                                                                                                         return;
                                                                                                                     }
-                                                                                                                    Long group = 1L;
+                                                                                                                    BigDecimal group = BigDecimal.ZERO;
                                                                                                                     Object group_obj = hashMapData.get("group");
                                                                                                                     if (group_obj != null) {
-                                                                                                                        group = Long.valueOf((String)group_obj);
-                                                                                                                        if(group == 0){
-                                                                                                                            group = 1L;
-                                                                                                                        }
+                                                                                                                        group = convertObjectToBigDecimal(group_obj);
                                                                                                                     }
                                                                                                                     HashMap dataMap = (HashMap) obj;
-                                                                                                                    Long solartotalinput = 0L;
-                                                                                                                    Long solartotaloutput = 0L;
-                                                                                                                    Long persengrid = 0L;
-                                                                                                                    Long persenpv = 0L;
-                                                                                                                    Long persensolar = 0L;
+                                                                                                                    BigDecimal solartotalinput = BigDecimal.ZERO;
+                                                                                                                    BigDecimal solartotaloutput = BigDecimal.ZERO;
+                                                                                                                    BigDecimal persengrid = BigDecimal.ZERO;
+                                                                                                                    BigDecimal persenpv = BigDecimal.ZERO;
+                                                                                                                    BigDecimal persensolar = BigDecimal.ZERO;
                                                                                                                     Object solartotalinput_obj = dataMap.get("solartotalinput");
                                                                                                                     if(solartotalinput_obj != null){
-                                                                                                                        solartotalinput = Long.valueOf((String)solartotalinput_obj);
+                                                                                                                        solartotalinput = convertObjectToBigDecimal(solartotalinput_obj);
                                                                                                                     }
                                                                                                                     Object solartotaloutput_obj = dataMap.get("solartotaloutput");
                                                                                                                     if(solartotaloutput_obj != null){
-                                                                                                                        solartotaloutput = Long.valueOf((String)solartotaloutput_obj);
+                                                                                                                        solartotaloutput = convertObjectToBigDecimal(solartotaloutput_obj);
                                                                                                                     }
                                                                                                                     Object persengrid_obj = dataMap.get("persengrid");
                                                                                                                     if(solartotaloutput_obj != null){
-                                                                                                                        persengrid = Long.valueOf((String)persengrid_obj);
+                                                                                                                        persengrid = convertObjectToBigDecimal(persengrid_obj);
                                                                                                                     }
                                                                                                                     Object persenpv_obj = dataMap.get("persenpv");
                                                                                                                     if(persenpv_obj != null){
-                                                                                                                        persenpv = Long.valueOf((String)persenpv_obj);
+                                                                                                                        persenpv = convertObjectToBigDecimal(persenpv_obj);
                                                                                                                     }
                                                                                                                     Object persensolar_obj = dataMap.get("persensolar");
                                                                                                                     if(persensolar_obj != null){
-                                                                                                                        persensolar = Long.valueOf((String)persensolar_obj);
+                                                                                                                        persensolar = convertObjectToBigDecimal(persensolar_obj);
                                                                                                                     }
-//                                                                                                                    log.info("solartotalinputs2g3 : {}", solartotalinput);
-//                                                                                                                    log.info("solartotaloutputs2g3 : {}", solartotaloutput);
-//                                                                                                                    log.info("persengrids2g3 : {}", persengrid);
-//                                                                                                                    log.info("persenpvs2g3 : {}", persenpv);
-//                                                                                                                    log.info("persensolars2g3 : {}", persensolar);
 
-                                                                                                                    solartotalinputall[0] += solartotalinput;
-                                                                                                                    solartotalinputall[0] = solartotalinputall[0] / group;
-                                                                                                                    solartotaloutputall[0] += solartotaloutput;
-                                                                                                                    solartotaloutputall[0] = solartotaloutputall[0] / group;
-                                                                                                                    persengridall[0] += persengrid;
-                                                                                                                    persenpvall[0] += persenpv;
-                                                                                                                    persensolarall[0] += persensolar;
+                                                                                                                    solartotalinputall[0] = solartotalinputall[0].add(solartotalinput);
 
+                                                                                                                    solartotaloutputall[0] = solartotaloutputall[0].add(solartotaloutput);
+
+                                                                                                                    solartotalinputall[0] = solartotalinputall[0].divide(group) ;
+
+                                                                                                                    solartotaloutputall[0] = solartotaloutputall[0].divide(group) ;
+
+                                                                                                                    persengridall[0] = persengridall[0].add(persengrid);
+                                                                                                                    persenpvall[0] = persenpvall[0].add(persenpv);
+                                                                                                                    persensolarall[0] = persensolarall[0].add(persensolar);
 
 
+                                                                                                                    isStartRef2s1g3[0] = false;
                                                                                                                     // ParameterRealtime2S1G4
                                                                                                                     ref2s1g4.addValueEventListener(new ValueEventListener() {
                                                                                                                         @Override
                                                                                                                         public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                                                                            if(dataSnapshot.exists() && isStart[0]){
+                                                                                                                            if(dataSnapshot.exists() && isStartRef2s1g4[0]){
                                                                                                                                 HashMap<String,HashMap> hashMapData = (HashMap<String,HashMap>) dataSnapshot.getValue();
                                                                                                                                 Object obj = hashMapData.get("DataRealtime2S1G4");
                                                                                                                                 if (obj == null) {
                                                                                                                                     return;
                                                                                                                                 }
-                                                                                                                                Long group = 0L;
+                                                                                                                                BigDecimal group = BigDecimal.ZERO;
                                                                                                                                 Object group_obj = hashMapData.get("group");
                                                                                                                                 if (group_obj != null) {
-                                                                                                                                    group = Long.valueOf((String)group_obj);
-                                                                                                                                    if(group == 0){
-                                                                                                                                        group = 1L;
-                                                                                                                                    }
+                                                                                                                                    group = convertObjectToBigDecimal(group_obj);
                                                                                                                                 }
                                                                                                                                 HashMap dataMap = (HashMap) obj;
-                                                                                                                                Long solartotalinput = 0L;
-                                                                                                                                Long solartotaloutput = 0L;
-                                                                                                                                Long persengrid = 0L;
-                                                                                                                                Long persenpv = 0L;
-                                                                                                                                Long persensolar = 0L;
+                                                                                                                                BigDecimal solartotalinput = BigDecimal.ZERO;
+                                                                                                                                BigDecimal solartotaloutput = BigDecimal.ZERO;
+                                                                                                                                BigDecimal persengrid = BigDecimal.ZERO;
+                                                                                                                                BigDecimal persenpv = BigDecimal.ZERO;
+                                                                                                                                BigDecimal persensolar = BigDecimal.ZERO;
                                                                                                                                 Object solartotalinput_obj = dataMap.get("solartotalinput");
                                                                                                                                 if(solartotalinput_obj != null){
-                                                                                                                                    solartotalinput = Long.valueOf((String)solartotalinput_obj);
+                                                                                                                                    solartotalinput = convertObjectToBigDecimal(solartotalinput_obj);
                                                                                                                                 }
                                                                                                                                 Object solartotaloutput_obj = dataMap.get("solartotaloutput");
                                                                                                                                 if(solartotaloutput_obj != null){
-                                                                                                                                    solartotaloutput = Long.valueOf((String)solartotaloutput_obj);
+                                                                                                                                    solartotaloutput = convertObjectToBigDecimal(solartotaloutput_obj);
                                                                                                                                 }
                                                                                                                                 Object persengrid_obj = dataMap.get("persengrid");
                                                                                                                                 if(solartotaloutput_obj != null){
-                                                                                                                                    persengrid = Long.valueOf((String)persengrid_obj);
+                                                                                                                                    persengrid = convertObjectToBigDecimal(persengrid_obj);
                                                                                                                                 }
                                                                                                                                 Object persenpv_obj = dataMap.get("persenpv");
                                                                                                                                 if(persenpv_obj != null){
-                                                                                                                                    persenpv = Long.valueOf((String)persenpv_obj);
+                                                                                                                                    persenpv = convertObjectToBigDecimal(persenpv_obj);
                                                                                                                                 }
                                                                                                                                 Object persensolar_obj = dataMap.get("persensolar");
                                                                                                                                 if(persensolar_obj != null){
-                                                                                                                                    persensolar = Long.valueOf((String)persensolar_obj);
+                                                                                                                                    persensolar = convertObjectToBigDecimal(persensolar_obj);
                                                                                                                                 }
-//                                                                                                                                log.info("solartotalinputs2g4 : {}", solartotalinput);
-//                                                                                                                                log.info("solartotaloutputs2g4 : {}", solartotaloutput);
-//                                                                                                                                log.info("persengrids2g4 : {}", persengrid);
-//                                                                                                                                log.info("persenpvs2g4 : {}", persenpv);
-//                                                                                                                                log.info("persensolars2g4 : {}", persensolar);
 
-                                                                                                                                solartotalinputall[0] += solartotalinput;
-                                                                                                                                solartotalinputall[0] = solartotalinputall[0] / group;
-                                                                                                                                solartotaloutputall[0] += solartotaloutput;
-                                                                                                                                solartotaloutputall[0] = solartotaloutputall[0] / group;
-                                                                                                                                persengridall[0] += persengrid;
-                                                                                                                                persenpvall[0] += persenpv;
-                                                                                                                                persensolarall[0] += persensolar;
+                                                                                                                                solartotalinputall[0] = solartotalinputall[0].add(solartotalinput);
 
+                                                                                                                                solartotaloutputall[0] = solartotaloutputall[0].add(solartotaloutput);
+
+                                                                                                                                solartotalinputall[0] = solartotalinputall[0].divide(group) ;
+
+                                                                                                                                solartotaloutputall[0] = solartotaloutputall[0].divide(group) ;
+
+                                                                                                                                persengridall[0] = persengridall[0].add(persengrid);
+                                                                                                                                persenpvall[0] = persenpvall[0].add(persenpv);
+                                                                                                                                persensolarall[0] = persensolarall[0].add(persensolar);
 
 
+                                                                                                                                isStartRef2s1g4[0] = false;
                                                                                                                                 // ParameterRealtime2S1G5
                                                                                                                                 ref2s1g5.addValueEventListener(new ValueEventListener() {
                                                                                                                                     @Override
                                                                                                                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                                                                                        if(dataSnapshot.exists() && isStart[0]){
+                                                                                                                                        if(dataSnapshot.exists() && isStartRef2s1g5[0]){
                                                                                                                                             HashMap<String,HashMap> hashMapData = (HashMap<String,HashMap>) dataSnapshot.getValue();
                                                                                                                                             Object obj = hashMapData.get("DataRealtime2S1G5");
                                                                                                                                             if (obj == null) {
                                                                                                                                                 return;
                                                                                                                                             }
-                                                                                                                                            Long group = 0L;
+                                                                                                                                            BigDecimal group = BigDecimal.ZERO;
                                                                                                                                             Object group_obj = hashMapData.get("group");
                                                                                                                                             if (group_obj != null) {
-                                                                                                                                                group = Long.valueOf((String)group_obj);
-                                                                                                                                                if(group == 0){
-                                                                                                                                                    group = 1L;
-                                                                                                                                                }
+                                                                                                                                                group = convertObjectToBigDecimal(group_obj);
                                                                                                                                             }
                                                                                                                                             HashMap dataMap = (HashMap) obj;
-                                                                                                                                            Long solartotalinput = 0L;
-                                                                                                                                            Long solartotaloutput = 0L;
-                                                                                                                                            Long persengrid = 0L;
-                                                                                                                                            Long persenpv = 0L;
-                                                                                                                                            Long persensolar = 0L;
+                                                                                                                                            BigDecimal solartotalinput = BigDecimal.ZERO;
+                                                                                                                                            BigDecimal solartotaloutput = BigDecimal.ZERO;
+                                                                                                                                            BigDecimal persengrid = BigDecimal.ZERO;
+                                                                                                                                            BigDecimal persenpv = BigDecimal.ZERO;
+                                                                                                                                            BigDecimal persensolar = BigDecimal.ZERO;
                                                                                                                                             Object solartotalinput_obj = dataMap.get("solartotalinput");
                                                                                                                                             if(solartotalinput_obj != null){
-                                                                                                                                                solartotalinput = Long.valueOf((String)solartotalinput_obj);
+                                                                                                                                                solartotalinput = convertObjectToBigDecimal(solartotalinput_obj);
                                                                                                                                             }
                                                                                                                                             Object solartotaloutput_obj = dataMap.get("solartotaloutput");
                                                                                                                                             if(solartotaloutput_obj != null){
-                                                                                                                                                solartotaloutput = Long.valueOf((String)solartotaloutput_obj);
+                                                                                                                                                solartotaloutput = convertObjectToBigDecimal(solartotaloutput_obj);
                                                                                                                                             }
                                                                                                                                             Object persengrid_obj = dataMap.get("persengrid");
                                                                                                                                             if(solartotaloutput_obj != null){
-                                                                                                                                                persengrid = Long.valueOf((String)persengrid_obj);
+                                                                                                                                                persengrid = convertObjectToBigDecimal(persengrid_obj);
                                                                                                                                             }
                                                                                                                                             Object persenpv_obj = dataMap.get("persenpv");
                                                                                                                                             if(persenpv_obj != null){
-                                                                                                                                                persenpv = Long.valueOf((String)persenpv_obj);
+                                                                                                                                                persenpv = convertObjectToBigDecimal(persenpv_obj);
                                                                                                                                             }
                                                                                                                                             Object persensolar_obj = dataMap.get("persensolar");
                                                                                                                                             if(persensolar_obj != null){
-                                                                                                                                                persensolar = Long.valueOf((String)persensolar_obj);
+                                                                                                                                                persensolar = convertObjectToBigDecimal(persensolar_obj);
                                                                                                                                             }
-//                                                                                                                                            log.info("solartotalinputs2g5 : {}", solartotalinput);
-//                                                                                                                                            log.info("solartotaloutputs2g5 : {}", solartotaloutput);
-//                                                                                                                                            log.info("persengrids2g5 : {}", persengrid);
-//                                                                                                                                            log.info("persenpvs2g5 : {}", persenpv);
-//                                                                                                                                            log.info("persensolars2g5 : {}", persensolar);
 
-                                                                                                                                            solartotalinputall[0] += solartotalinput;
-                                                                                                                                            solartotalinputall[0] = solartotalinputall[0] / group;
-                                                                                                                                            solartotaloutputall[0] += solartotaloutput;
-                                                                                                                                            solartotaloutputall[0] = solartotaloutputall[0] / group;
-                                                                                                                                            persengridall[0] += persengrid;
-                                                                                                                                            persenpvall[0] += persenpv;
-                                                                                                                                            persensolarall[0] += persensolar;
+                                                                                                                                            solartotalinputall[0] = solartotalinputall[0].add(solartotalinput);
 
+                                                                                                                                            solartotaloutputall[0] = solartotaloutputall[0].add(solartotaloutput);
 
+                                                                                                                                            solartotalinputall[0] = solartotalinputall[0].divide(group) ;
 
+                                                                                                                                            solartotaloutputall[0] = solartotaloutputall[0].divide(group) ;
+
+                                                                                                                                            persengridall[0] = persengridall[0].add(persengrid);
+                                                                                                                                            persenpvall[0] = persenpvall[0].add(persenpv);
+                                                                                                                                            persensolarall[0] = persensolarall[0].add(persensolar);
+
+//                                                                                                                                            log.info("solartotalinputs2g1 : {}", solartotalinput);
+//                                                                                                                                            log.info("solartotaloutputs2g1 : {}", solartotaloutput);
+//                                                                                                                                            log.info("persengrids2g1 : {}", persengrid);
+//                                                                                                                                            log.info("persenpvs2g1 : {}", persenpv);
+//                                                                                                                                            log.info("persensolars2g1 : {}", persensolar);
+                                                                                                                                            isStartRef2s1g5[0] = false;
                                                                                                                                             // ParameterRealtime2S1G6
                                                                                                                                             ref2s1g6.addValueEventListener(new ValueEventListener() {
                                                                                                                                                 @Override
                                                                                                                                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                                                                                                    if(dataSnapshot.exists() && isStart[0]){
+                                                                                                                                                    if(dataSnapshot.exists() && isStartRef2s1g6[0]){
                                                                                                                                                         HashMap<String,HashMap> hashMapData = (HashMap<String,HashMap>) dataSnapshot.getValue();
                                                                                                                                                         Object obj = hashMapData.get("DataRealtime2S1G6");
                                                                                                                                                         if (obj == null) {
                                                                                                                                                             return;
                                                                                                                                                         }
-                                                                                                                                                        Long group = 0L;
+                                                                                                                                                        BigDecimal group = BigDecimal.ONE;
                                                                                                                                                         Object group_obj = hashMapData.get("group");
                                                                                                                                                         if (group_obj != null) {
-                                                                                                                                                            group = Long.valueOf((String)group_obj);
-                                                                                                                                                            if(group == 0){
-                                                                                                                                                                group = 1L;
-                                                                                                                                                            }
+                                                                                                                                                            group = convertObjectToBigDecimal(group_obj);
+                                                                                                                                                            group = (group.equals(BigDecimal.ZERO))?BigDecimal.ONE:group;
                                                                                                                                                         }
                                                                                                                                                         HashMap dataMap = (HashMap) obj;
-                                                                                                                                                        Long solartotalinput = 0L;
-                                                                                                                                                        Long solartotaloutput = 0L;
-                                                                                                                                                        Long persengrid = 0L;
-                                                                                                                                                        Long persenpv = 0L;
-                                                                                                                                                        Long persensolar = 0L;
+                                                                                                                                                        BigDecimal solartotalinput = BigDecimal.ZERO;
+                                                                                                                                                        BigDecimal solartotaloutput = BigDecimal.ZERO;
+                                                                                                                                                        BigDecimal persengrid = BigDecimal.ZERO;
+                                                                                                                                                        BigDecimal persenpv = BigDecimal.ZERO;
+                                                                                                                                                        BigDecimal persensolar = BigDecimal.ZERO;
                                                                                                                                                         Object solartotalinput_obj = dataMap.get("solartotalinput");
                                                                                                                                                         if(solartotalinput_obj != null){
-                                                                                                                                                            solartotalinput = Long.valueOf((String)solartotalinput_obj);
+                                                                                                                                                            solartotalinput = convertObjectToBigDecimal(solartotalinput_obj);
                                                                                                                                                         }
                                                                                                                                                         Object solartotaloutput_obj = dataMap.get("solartotaloutput");
                                                                                                                                                         if(solartotaloutput_obj != null){
-                                                                                                                                                            solartotaloutput = Long.valueOf((String)solartotaloutput_obj);
+                                                                                                                                                            solartotaloutput = convertObjectToBigDecimal(solartotaloutput_obj);
                                                                                                                                                         }
                                                                                                                                                         Object persengrid_obj = dataMap.get("persengrid");
                                                                                                                                                         if(solartotaloutput_obj != null){
-                                                                                                                                                            persengrid = Long.valueOf((String)persengrid_obj);
+                                                                                                                                                            persengrid = convertObjectToBigDecimal(persengrid_obj);
                                                                                                                                                         }
                                                                                                                                                         Object persenpv_obj = dataMap.get("persenpv");
                                                                                                                                                         if(persenpv_obj != null){
-                                                                                                                                                            persenpv = Long.valueOf((String)persenpv_obj);
+                                                                                                                                                            persenpv = convertObjectToBigDecimal(persenpv_obj);
                                                                                                                                                         }
                                                                                                                                                         Object persensolar_obj = dataMap.get("persensolar");
                                                                                                                                                         if(persensolar_obj != null){
-                                                                                                                                                            persensolar = Long.valueOf((String)persensolar_obj);
+                                                                                                                                                            persensolar = convertObjectToBigDecimal(persensolar_obj);
                                                                                                                                                         }
-//                                                                                                                                                        log.info("solartotalinputs2g6 : {}", solartotalinput);
-//                                                                                                                                                        log.info("solartotaloutputs2g6 : {}", solartotaloutput);
-//                                                                                                                                                        log.info("persengrids2g6 : {}", persengrid);
-//                                                                                                                                                        log.info("persenpvs2g6 : {}", persenpv);
-//                                                                                                                                                        log.info("persensolars2g6 : {}", persensolar);
 
-                                                                                                                                                        solartotalinputall[0] += solartotalinput;
-                                                                                                                                                        solartotalinputall[0] = solartotalinputall[0] / group;
-                                                                                                                                                        solartotaloutputall[0] += solartotaloutput;
-                                                                                                                                                        solartotaloutputall[0] = solartotaloutputall[0] / group;
-                                                                                                                                                        persengridall[0] += persengrid;
-                                                                                                                                                        persenpvall[0] += persenpv;
-                                                                                                                                                        persensolarall[0] += persensolar;
+                                                                                                                                                        solartotalinputall[0] = solartotalinputall[0].add(solartotalinput);
 
-//                                                                                                                                                        log.info("solartotalinputall : {}", solartotalinputall[0]);
-//                                                                                                                                                        log.info("solartotaloutputall : {}", solartotaloutputall[0]);
-//                                                                                                                                                        log.info("persengridall : {}", persengridall[0]);
-//                                                                                                                                                        log.info("persenpvall : {}", persenpvall[0]);
-//                                                                                                                                                        log.info("persensolarall : {}", persensolarall[0]);
+                                                                                                                                                        solartotaloutputall[0] = solartotaloutputall[0].add(solartotaloutput);
 
+                                                                                                                                                        solartotalinputall[0] = solartotalinputall[0].divide(group) ;
 
+                                                                                                                                                        solartotaloutputall[0] = solartotaloutputall[0].divide(group) ;
 
+                                                                                                                                                        persengridall[0] = persengridall[0].add(persengrid);
+                                                                                                                                                        persenpvall[0] = persenpvall[0].add(persenpv);
+                                                                                                                                                        persensolarall[0] = persensolarall[0].add(persensolar);
+
+                                                                                                                                                        isStartRef2s1g6[0] = false;
                                                                                                                                                         // ParameterRealtime3S1G1
                                                                                                                                                         ref3s1g1.addValueEventListener(new ValueEventListener() {
                                                                                                                                                             @Override
                                                                                                                                                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                                                                                                                if(dataSnapshot.exists() && isStart[0]){
+                                                                                                                                                                if(dataSnapshot.exists() && isStartRef3s1g1[0]){
                                                                                                                                                                     HashMap<String,HashMap> hashMapData = (HashMap<String,HashMap>) dataSnapshot.getValue();
                                                                                                                                                                     Object obj = hashMapData.get("DataRealtime3S1G1");
                                                                                                                                                                     if (obj == null) {
                                                                                                                                                                         return;
                                                                                                                                                                     }
                                                                                                                                                                     HashMap dataMap = (HashMap) obj;
-                                                                                                                                                                    Long griduse = 0L;
-                                                                                                                                                                    Long load = 0L;
-                                                                                                                                                                    Long solartotalinputacc = 0L;
-                                                                                                                                                                    Long solartotaloutputacc = 0L;
+                                                                                                                                                                    BigDecimal griduse = BigDecimal.ZERO;
+                                                                                                                                                                    BigDecimal load = BigDecimal.ZERO;
+                                                                                                                                                                    BigDecimal solartotalinputacc = BigDecimal.ZERO;
+                                                                                                                                                                    BigDecimal solartotaloutputacc = BigDecimal.ZERO;
                                                                                                                                                                     Object griduse_obj = dataMap.get("griduse");
                                                                                                                                                                     if(griduse_obj != null){
-                                                                                                                                                                        griduse = (Long)griduse_obj;
+                                                                                                                                                                        griduse = convertObjectToBigDecimal(griduse_obj);
                                                                                                                                                                     }
                                                                                                                                                                     Object load_obj = dataMap.get("load");
                                                                                                                                                                     if(load_obj != null){
-                                                                                                                                                                        load = (Long)load_obj;
+                                                                                                                                                                        load = convertObjectToBigDecimal(load_obj);
                                                                                                                                                                     }
                                                                                                                                                                     Object solartotalinputacc_obj = dataMap.get("solartotalinputacc");
                                                                                                                                                                     if(solartotalinputacc_obj != null){
-                                                                                                                                                                        solartotalinputacc = (Long)solartotalinputacc_obj;
+                                                                                                                                                                        solartotalinputacc = convertObjectToBigDecimal(solartotalinputacc_obj);
                                                                                                                                                                     }
                                                                                                                                                                     Object solartotaloutputacc_obj = dataMap.get("solartotaloutputacc");
                                                                                                                                                                     if(solartotaloutputacc_obj != null){
-                                                                                                                                                                        solartotaloutputacc = (Long)solartotaloutputacc_obj;
+                                                                                                                                                                        solartotaloutputacc = convertObjectToBigDecimal(solartotaloutputacc_obj);
                                                                                                                                                                     }
 
-//                                                                                                                                                                    log.info("griduses3g1 : {}", griduse);
-//                                                                                                                                                                    log.info("loads3g1 : {}", load);
-//                                                                                                                                                                    log.info("solartotalinputaccs3g1 : {}", solartotalinputacc);
-//                                                                                                                                                                    log.info("solartotaloutputaccs3g1 : {}", solartotaloutputacc);
+                                                                                                                                                                    griduseall[0] = griduseall[0].add(griduse);
+                                                                                                                                                                    loadall[0] = loadall[0].add(load);
+                                                                                                                                                                    solartotalinputaccall[0] = solartotalinputaccall[0].add(solartotalinputacc);
+                                                                                                                                                                    solartotaloutputaccall[0] = solartotaloutputaccall[0].add(solartotaloutputacc);
 
-                                                                                                                                                                    griduseall[0] += griduse;
-                                                                                                                                                                    loadall[0] += load;
-                                                                                                                                                                    solartotalinputaccall[0] += solartotalinputacc;
-                                                                                                                                                                    solartotaloutputaccall[0] += solartotaloutputacc;
-
-
-
+                                                                                                                                                                    isStartRef3s1g1[0] = false;
                                                                                                                                                                     // ParameterRealtime3S1G2
                                                                                                                                                                     ref3s1g2.addValueEventListener(new ValueEventListener() {
                                                                                                                                                                         @Override
                                                                                                                                                                         public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                                                                                                                            if(dataSnapshot.exists() && isStart[0]){
+                                                                                                                                                                            if(dataSnapshot.exists() && isStartRef3s1g2[0]){
                                                                                                                                                                                 HashMap<String,HashMap> hashMapData = (HashMap<String,HashMap>) dataSnapshot.getValue();
                                                                                                                                                                                 Object obj = hashMapData.get("DataRealtime3S1G2");
                                                                                                                                                                                 if (obj == null) {
                                                                                                                                                                                     return;
                                                                                                                                                                                 }
                                                                                                                                                                                 HashMap dataMap = (HashMap) obj;
-                                                                                                                                                                                Long griduse = 0L;
-                                                                                                                                                                                Long load = 0L;
-                                                                                                                                                                                Long solartotalinputacc = 0L;
-                                                                                                                                                                                Long solartotaloutputacc = 0L;
+                                                                                                                                                                                BigDecimal griduse = BigDecimal.ZERO;
+                                                                                                                                                                                BigDecimal load = BigDecimal.ZERO;
+                                                                                                                                                                                BigDecimal solartotalinputacc = BigDecimal.ZERO;
+                                                                                                                                                                                BigDecimal solartotaloutputacc = BigDecimal.ZERO;
                                                                                                                                                                                 Object griduse_obj = dataMap.get("griduse");
                                                                                                                                                                                 if(griduse_obj != null){
-                                                                                                                                                                                    griduse = (Long)griduse_obj;
+                                                                                                                                                                                    griduse = convertObjectToBigDecimal(griduse_obj);
                                                                                                                                                                                 }
                                                                                                                                                                                 Object load_obj = dataMap.get("load");
                                                                                                                                                                                 if(load_obj != null){
-                                                                                                                                                                                    load = (Long)load_obj;
+                                                                                                                                                                                    load = convertObjectToBigDecimal(load_obj);
                                                                                                                                                                                 }
                                                                                                                                                                                 Object solartotalinputacc_obj = dataMap.get("solartotalinputacc");
                                                                                                                                                                                 if(solartotalinputacc_obj != null){
-                                                                                                                                                                                    solartotalinputacc = (Long)solartotalinputacc_obj;
+                                                                                                                                                                                    solartotalinputacc = convertObjectToBigDecimal(solartotalinputacc_obj);
                                                                                                                                                                                 }
                                                                                                                                                                                 Object solartotaloutputacc_obj = dataMap.get("solartotaloutputacc");
                                                                                                                                                                                 if(solartotaloutputacc_obj != null){
-                                                                                                                                                                                    solartotaloutputacc = (Long)solartotaloutputacc_obj;
+                                                                                                                                                                                    solartotaloutputacc = convertObjectToBigDecimal(solartotaloutputacc_obj);
                                                                                                                                                                                 }
 
-//                                                                                                                                                                                log.info("griduses3g2 : {}", griduse);
-//                                                                                                                                                                                log.info("loads3g2 : {}", load);
-//                                                                                                                                                                                log.info("solartotalinputaccs3g2 : {}", solartotalinputacc);
-//                                                                                                                                                                                log.info("solartotaloutputaccs3g2 : {}", solartotaloutputacc);
-
-                                                                                                                                                                                griduseall[0] += griduse;
-                                                                                                                                                                                loadall[0] += load;
-                                                                                                                                                                                solartotalinputaccall[0] += solartotalinputacc;
-                                                                                                                                                                                solartotaloutputaccall[0] += solartotaloutputacc;
+                                                                                                                                                                                griduseall[0] = griduseall[0].add(griduse);
+                                                                                                                                                                                loadall[0] = loadall[0].add(load);
+                                                                                                                                                                                solartotalinputaccall[0] = solartotalinputaccall[0].add(solartotalinputacc);
+                                                                                                                                                                                solartotaloutputaccall[0] = solartotaloutputaccall[0].add(solartotaloutputacc);
 
 
-
+                                                                                                                                                                                isStartRef3s1g2[0] = false;
                                                                                                                                                                                 // ParameterRealtime3S1G3
                                                                                                                                                                                 ref3s1g3.addValueEventListener(new ValueEventListener() {
                                                                                                                                                                                     @Override
                                                                                                                                                                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                                                                                                                                        if(dataSnapshot.exists() && isStart[0]){
+                                                                                                                                                                                        if(dataSnapshot.exists() && isStartRef3s1g3[0]){
                                                                                                                                                                                             HashMap<String,HashMap> hashMapData = (HashMap<String,HashMap>) dataSnapshot.getValue();
                                                                                                                                                                                             Object obj = hashMapData.get("DataRealtime3S1G3");
                                                                                                                                                                                             if (obj == null) {
                                                                                                                                                                                                 return;
                                                                                                                                                                                             }
                                                                                                                                                                                             HashMap dataMap = (HashMap) obj;
-                                                                                                                                                                                            Long griduse = 0L;
-                                                                                                                                                                                            Long load = 0L;
-                                                                                                                                                                                            Long solartotalinputacc = 0L;
-                                                                                                                                                                                            Long solartotaloutputacc = 0L;
+                                                                                                                                                                                            BigDecimal griduse = BigDecimal.ZERO;
+                                                                                                                                                                                            BigDecimal load = BigDecimal.ZERO;
+                                                                                                                                                                                            BigDecimal solartotalinputacc = BigDecimal.ZERO;
+                                                                                                                                                                                            BigDecimal solartotaloutputacc = BigDecimal.ZERO;
                                                                                                                                                                                             Object griduse_obj = dataMap.get("griduse");
                                                                                                                                                                                             if(griduse_obj != null){
-                                                                                                                                                                                                griduse = (Long)griduse_obj;
+                                                                                                                                                                                                griduse = convertObjectToBigDecimal(griduse_obj);
                                                                                                                                                                                             }
                                                                                                                                                                                             Object load_obj = dataMap.get("load");
                                                                                                                                                                                             if(load_obj != null){
-                                                                                                                                                                                                load = (Long)load_obj;
+                                                                                                                                                                                                load = convertObjectToBigDecimal(load_obj);
                                                                                                                                                                                             }
                                                                                                                                                                                             Object solartotalinputacc_obj = dataMap.get("solartotalinputacc");
                                                                                                                                                                                             if(solartotalinputacc_obj != null){
-                                                                                                                                                                                                solartotalinputacc = (Long)solartotalinputacc_obj;
+                                                                                                                                                                                                solartotalinputacc = convertObjectToBigDecimal(solartotalinputacc_obj);
                                                                                                                                                                                             }
                                                                                                                                                                                             Object solartotaloutputacc_obj = dataMap.get("solartotaloutputacc");
                                                                                                                                                                                             if(solartotaloutputacc_obj != null){
-                                                                                                                                                                                                solartotaloutputacc = (Long)solartotaloutputacc_obj;
+                                                                                                                                                                                                solartotaloutputacc = convertObjectToBigDecimal(solartotaloutputacc_obj);
                                                                                                                                                                                             }
 
-//                                                                                                                                                                                            log.info("griduses3g3 : {}", griduse);
-//                                                                                                                                                                                            log.info("loads3g3 : {}", load);
-//                                                                                                                                                                                            log.info("solartotalinputaccs3g3 : {}", solartotalinputacc);
-//                                                                                                                                                                                            log.info("solartotaloutputaccs3g3 : {}", solartotaloutputacc);
-
-                                                                                                                                                                                            griduseall[0] += griduse;
-                                                                                                                                                                                            loadall[0] += load;
-                                                                                                                                                                                            solartotalinputaccall[0] += solartotalinputacc;
-                                                                                                                                                                                            solartotaloutputaccall[0] += solartotaloutputacc;
+                                                                                                                                                                                            griduseall[0] = griduseall[0].add(griduse);
+                                                                                                                                                                                            loadall[0] = loadall[0].add(load);
+                                                                                                                                                                                            solartotalinputaccall[0] = solartotalinputaccall[0].add(solartotalinputacc);
+                                                                                                                                                                                            solartotaloutputaccall[0] = solartotaloutputaccall[0].add(solartotaloutputacc);
 
 
-
+                                                                                                                                                                                            isStartRef3s1g3[0] = false;
                                                                                                                                                                                             // ParameterRealtime3S1G4
                                                                                                                                                                                             ref3s1g4.addValueEventListener(new ValueEventListener() {
                                                                                                                                                                                                 @Override
                                                                                                                                                                                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                                                                                                                                                    if(dataSnapshot.exists() && isStart[0]){
+                                                                                                                                                                                                    if(dataSnapshot.exists() && isStartRef3s1g4[0]){
                                                                                                                                                                                                         HashMap<String,HashMap> hashMapData = (HashMap<String,HashMap>) dataSnapshot.getValue();
                                                                                                                                                                                                         Object obj = hashMapData.get("DataRealtime3S1G4");
                                                                                                                                                                                                         if (obj == null) {
                                                                                                                                                                                                             return;
                                                                                                                                                                                                         }
                                                                                                                                                                                                         HashMap dataMap = (HashMap) obj;
-                                                                                                                                                                                                        Long griduse = 0L;
-                                                                                                                                                                                                        Long load = 0L;
-                                                                                                                                                                                                        Long solartotalinputacc = 0L;
-                                                                                                                                                                                                        Long solartotaloutputacc = 0L;
+                                                                                                                                                                                                        BigDecimal griduse = BigDecimal.ZERO;
+                                                                                                                                                                                                        BigDecimal load = BigDecimal.ZERO;
+                                                                                                                                                                                                        BigDecimal solartotalinputacc = BigDecimal.ZERO;
+                                                                                                                                                                                                        BigDecimal solartotaloutputacc = BigDecimal.ZERO;
                                                                                                                                                                                                         Object griduse_obj = dataMap.get("griduse");
                                                                                                                                                                                                         if(griduse_obj != null){
-                                                                                                                                                                                                            griduse = (Long)griduse_obj;
+                                                                                                                                                                                                            griduse = convertObjectToBigDecimal(griduse_obj);
                                                                                                                                                                                                         }
                                                                                                                                                                                                         Object load_obj = dataMap.get("load");
                                                                                                                                                                                                         if(load_obj != null){
-                                                                                                                                                                                                            load = (Long)load_obj;
+                                                                                                                                                                                                            load = convertObjectToBigDecimal(load_obj);
                                                                                                                                                                                                         }
                                                                                                                                                                                                         Object solartotalinputacc_obj = dataMap.get("solartotalinputacc");
                                                                                                                                                                                                         if(solartotalinputacc_obj != null){
-                                                                                                                                                                                                            solartotalinputacc = (Long)solartotalinputacc_obj;
+                                                                                                                                                                                                            solartotalinputacc = convertObjectToBigDecimal(solartotalinputacc_obj);
                                                                                                                                                                                                         }
                                                                                                                                                                                                         Object solartotaloutputacc_obj = dataMap.get("solartotaloutputacc");
                                                                                                                                                                                                         if(solartotaloutputacc_obj != null){
-                                                                                                                                                                                                            solartotaloutputacc = (Long)solartotaloutputacc_obj;
+                                                                                                                                                                                                            solartotaloutputacc = convertObjectToBigDecimal(solartotaloutputacc_obj);
                                                                                                                                                                                                         }
 
-//                                                                                                                                                                                                        log.info("griduses3g4 : {}", griduse);
-//                                                                                                                                                                                                        log.info("loads3g4 : {}", load);
-//                                                                                                                                                                                                        log.info("solartotalinputaccs3g4 : {}", solartotalinputacc);
-//                                                                                                                                                                                                        log.info("solartotaloutputaccs3g4 : {}", solartotaloutputacc);
-
-                                                                                                                                                                                                        griduseall[0] += griduse;
-                                                                                                                                                                                                        loadall[0] += load;
-                                                                                                                                                                                                        solartotalinputaccall[0] += solartotalinputacc;
-                                                                                                                                                                                                        solartotaloutputaccall[0] += solartotaloutputacc;
+                                                                                                                                                                                                        griduseall[0] = griduseall[0].add(griduse);
+                                                                                                                                                                                                        loadall[0] = loadall[0].add(load);
+                                                                                                                                                                                                        solartotalinputaccall[0] = solartotalinputaccall[0].add(solartotalinputacc);
+                                                                                                                                                                                                        solartotaloutputaccall[0] = solartotaloutputaccall[0].add(solartotaloutputacc);
 
 
-
+                                                                                                                                                                                                        isStartRef3s1g4[0] = false;
                                                                                                                                                                                                         // ParameterRealtime3S1G5
                                                                                                                                                                                                         ref3s1g5.addValueEventListener(new ValueEventListener() {
                                                                                                                                                                                                             @Override
                                                                                                                                                                                                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                                                                                                                                                                if(dataSnapshot.exists() && isStart[0]){
+                                                                                                                                                                                                                if(dataSnapshot.exists() && isStartRef3s1g5[0]){
                                                                                                                                                                                                                     HashMap<String,HashMap> hashMapData = (HashMap<String,HashMap>) dataSnapshot.getValue();
                                                                                                                                                                                                                     Object obj = hashMapData.get("DataRealtime3S1G5");
                                                                                                                                                                                                                     if (obj == null) {
                                                                                                                                                                                                                         return;
                                                                                                                                                                                                                     }
                                                                                                                                                                                                                     HashMap dataMap = (HashMap) obj;
-                                                                                                                                                                                                                    Long griduse = 0L;
-                                                                                                                                                                                                                    Long load = 0L;
-                                                                                                                                                                                                                    Long solartotalinputacc = 0L;
-                                                                                                                                                                                                                    Long solartotaloutputacc = 0L;
+                                                                                                                                                                                                                    BigDecimal griduse = BigDecimal.ZERO;
+                                                                                                                                                                                                                    BigDecimal load = BigDecimal.ZERO;
+                                                                                                                                                                                                                    BigDecimal solartotalinputacc = BigDecimal.ZERO;
+                                                                                                                                                                                                                    BigDecimal solartotaloutputacc = BigDecimal.ZERO;
                                                                                                                                                                                                                     Object griduse_obj = dataMap.get("griduse");
                                                                                                                                                                                                                     if(griduse_obj != null){
-                                                                                                                                                                                                                        griduse = (Long)griduse_obj;
+                                                                                                                                                                                                                        griduse = convertObjectToBigDecimal(griduse_obj);
                                                                                                                                                                                                                     }
                                                                                                                                                                                                                     Object load_obj = dataMap.get("load");
                                                                                                                                                                                                                     if(load_obj != null){
-                                                                                                                                                                                                                        load = (Long)load_obj;
+                                                                                                                                                                                                                        load = convertObjectToBigDecimal(load_obj);
                                                                                                                                                                                                                     }
                                                                                                                                                                                                                     Object solartotalinputacc_obj = dataMap.get("solartotalinputacc");
                                                                                                                                                                                                                     if(solartotalinputacc_obj != null){
-                                                                                                                                                                                                                        solartotalinputacc = (Long)solartotalinputacc_obj;
+                                                                                                                                                                                                                        solartotalinputacc = convertObjectToBigDecimal(solartotalinputacc_obj);
                                                                                                                                                                                                                     }
                                                                                                                                                                                                                     Object solartotaloutputacc_obj = dataMap.get("solartotaloutputacc");
                                                                                                                                                                                                                     if(solartotaloutputacc_obj != null){
-                                                                                                                                                                                                                        solartotaloutputacc = (Long)solartotaloutputacc_obj;
+                                                                                                                                                                                                                        solartotaloutputacc = convertObjectToBigDecimal(solartotaloutputacc_obj);
                                                                                                                                                                                                                     }
 
-//                                                                                                                                                                                                                    log.info("griduses3g5 : {}", griduse);
-//                                                                                                                                                                                                                    log.info("loads3g5 : {}", load);
-//                                                                                                                                                                                                                    log.info("solartotalinputaccs3g5 : {}", solartotalinputacc);
-//                                                                                                                                                                                                                    log.info("solartotaloutputaccs3g5 : {}", solartotaloutputacc);
-
-                                                                                                                                                                                                                    griduseall[0] += griduse;
-                                                                                                                                                                                                                    loadall[0] += load;
-                                                                                                                                                                                                                    solartotalinputaccall[0] += solartotalinputacc;
-                                                                                                                                                                                                                    solartotaloutputaccall[0] += solartotaloutputacc;
+                                                                                                                                                                                                                    griduseall[0] = griduseall[0].add(griduse);
+                                                                                                                                                                                                                    loadall[0] = loadall[0].add(load);
+                                                                                                                                                                                                                    solartotalinputaccall[0] = solartotalinputaccall[0].add(solartotalinputacc);
+                                                                                                                                                                                                                    solartotaloutputaccall[0] = solartotaloutputaccall[0].add(solartotaloutputacc);
 
 
-
+                                                                                                                                                                                                                    isStartRef3s1g5[0] = false;
                                                                                                                                                                                                                     // ParameterRealtime3S1G6
                                                                                                                                                                                                                     ref3s1g6.addValueEventListener(new ValueEventListener() {
                                                                                                                                                                                                                         @Override
                                                                                                                                                                                                                         public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                                                                                                                                                                            if(dataSnapshot.exists() && isStart[0]){
+                                                                                                                                                                                                                            if(dataSnapshot.exists() && isStartRef3s1g6[0]){
                                                                                                                                                                                                                                 HashMap<String,HashMap> hashMapData = (HashMap<String,HashMap>) dataSnapshot.getValue();
                                                                                                                                                                                                                                 Object obj = hashMapData.get("DataRealtime3S1G6");
                                                                                                                                                                                                                                 if (obj == null) {
                                                                                                                                                                                                                                     return;
                                                                                                                                                                                                                                 }
                                                                                                                                                                                                                                 HashMap dataMap = (HashMap) obj;
-                                                                                                                                                                                                                                Long griduse = 0L;
-                                                                                                                                                                                                                                Long load = 0L;
-                                                                                                                                                                                                                                Long solartotalinputacc = 0L;
-                                                                                                                                                                                                                                Long solartotaloutputacc = 0L;
+                                                                                                                                                                                                                                BigDecimal griduse = BigDecimal.ZERO;
+                                                                                                                                                                                                                                BigDecimal load = BigDecimal.ZERO;
+                                                                                                                                                                                                                                BigDecimal solartotalinputacc = BigDecimal.ZERO;
+                                                                                                                                                                                                                                BigDecimal solartotaloutputacc = BigDecimal.ZERO;
                                                                                                                                                                                                                                 Object griduse_obj = dataMap.get("griduse");
                                                                                                                                                                                                                                 if(griduse_obj != null){
-                                                                                                                                                                                                                                    griduse = (Long)griduse_obj;
+                                                                                                                                                                                                                                    griduse = convertObjectToBigDecimal(griduse_obj);
                                                                                                                                                                                                                                 }
                                                                                                                                                                                                                                 Object load_obj = dataMap.get("load");
                                                                                                                                                                                                                                 if(load_obj != null){
-                                                                                                                                                                                                                                    load = (Long)load_obj;
+                                                                                                                                                                                                                                    load = convertObjectToBigDecimal(load_obj);
                                                                                                                                                                                                                                 }
                                                                                                                                                                                                                                 Object solartotalinputacc_obj = dataMap.get("solartotalinputacc");
                                                                                                                                                                                                                                 if(solartotalinputacc_obj != null){
-                                                                                                                                                                                                                                    solartotalinputacc = (Long)solartotalinputacc_obj;
+                                                                                                                                                                                                                                    solartotalinputacc = convertObjectToBigDecimal(solartotalinputacc_obj);
                                                                                                                                                                                                                                 }
                                                                                                                                                                                                                                 Object solartotaloutputacc_obj = dataMap.get("solartotaloutputacc");
                                                                                                                                                                                                                                 if(solartotaloutputacc_obj != null){
-                                                                                                                                                                                                                                    solartotaloutputacc = (Long)solartotaloutputacc_obj;
+                                                                                                                                                                                                                                    solartotaloutputacc = convertObjectToBigDecimal(solartotaloutputacc_obj);
                                                                                                                                                                                                                                 }
 
-//                                                                                                                                                                                                                                log.info("griduses3g6 : {}", griduse);
-//                                                                                                                                                                                                                                log.info("loads3g6 : {}", load);
-//                                                                                                                                                                                                                                log.info("solartotalinputaccs3g6 : {}", solartotalinputacc);
-//                                                                                                                                                                                                                                log.info("solartotaloutputaccs3g6 : {}", solartotaloutputacc);
-
-                                                                                                                                                                                                                                griduseall[0] += griduse;
-                                                                                                                                                                                                                                loadall[0] += load;
-                                                                                                                                                                                                                                solartotalinputaccall[0] += solartotalinputacc;
-                                                                                                                                                                                                                                solartotaloutputaccall[0] += solartotaloutputacc;
+                                                                                                                                                                                                                                griduseall[0] = griduseall[0].add(griduse);
+                                                                                                                                                                                                                                loadall[0] = loadall[0].add(load);
+                                                                                                                                                                                                                                solartotalinputaccall[0] = solartotalinputaccall[0].add(solartotalinputacc);
+                                                                                                                                                                                                                                solartotaloutputaccall[0] = solartotaloutputaccall[0].add(solartotaloutputacc);
 
 //                                                                                                                                                                                                                                log.info("gridkwTall : {}", gridkwTall[0]);
 //                                                                                                                                                                                                                                log.info("LoadkwTall : {}", LoadkwTall[0]);
@@ -887,7 +886,11 @@ try {
                                                                                                                                                                                                                                 userUpdates.put("solartotaloutputaccall", solartotaloutputaccall[0]);
                                                                                                                                                                                                                                 log.info("userUpdates : {}", userUpdates);
                                                                                                                                                                                                                                 refTotal.setValueAsync(userUpdates);
-                                                                                                                                                                                                                                isStart[0] = false;
+
+                                                                                                                                                                                                                                isStartRef3s1g6[0] = false;
+
+                                                                                                                                                                                                                                log.info("End processQueueTotal at {}", new Date());
+
                                                                                                                                                                                                                             }
                                                                                                                                                                                                                         }
 
@@ -1070,10 +1073,9 @@ try {
 
 
 }catch (Exception e){
-    log.error("Exception : ");
+    log.error("Exception : ",e);
     e.printStackTrace();
 }finally {
-    log.info("End processQueueTotal at {}", new Date());
     return userUpdates;
 }
 
