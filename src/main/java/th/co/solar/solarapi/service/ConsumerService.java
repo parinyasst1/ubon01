@@ -57,7 +57,7 @@ public class ConsumerService {
         }else{
             log.warn("not convertObjectToBigDecimal {}",object.getClass());
         }
-        return result;
+        return result.setScale(1, BigDecimal.ROUND_HALF_UP);
     }
 
     public Map<String, Object> processQueueTotal() {
