@@ -46,12 +46,27 @@ class SolarapiApplicationTests {
 		log.info(c.toString());
 	}
 
+	@Test
+	public void test2() throws JsonProcessingException {
+		Object object = -4.1;
+		BigDecimal s = convertObjectToBigDecimal(object);
+		log.info(s.toString());
+	}
+
 	public BigDecimal convertObjectToBigDecimal(Object object){
 		BigDecimal result = BigDecimal.ZERO;
 		if(object instanceof String){
 			result = new BigDecimal((String)object);
 		}else if(object instanceof Long){
 			result = new BigDecimal((Long)object);
+		}else if(object instanceof Integer){
+			result = new BigDecimal((Integer)object);
+		}else if(object instanceof Float){
+			result = new BigDecimal((Float)object);
+		}else if(object instanceof Double){
+			result = new BigDecimal((Double)object);
+		}else if(object instanceof Integer){
+			result = new BigDecimal((Integer)object);
 		}
 		return result;
 	}

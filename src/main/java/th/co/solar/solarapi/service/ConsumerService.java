@@ -46,6 +46,16 @@ public class ConsumerService {
             result = new BigDecimal((String)object);
         }else if(object instanceof Long){
             result = new BigDecimal((Long)object);
+        }else if(object instanceof Integer){
+            result = new BigDecimal((Integer)object);
+        }else if(object instanceof Float){
+            result = new BigDecimal((Float)object);
+        }else if(object instanceof Double){
+            result = new BigDecimal((Double)object);
+        }else if(object instanceof Integer){
+            result = new BigDecimal((Integer)object);
+        }else{
+            log.warn("not convertObjectToBigDecimal {}",object.getClass());
         }
         return result;
     }
