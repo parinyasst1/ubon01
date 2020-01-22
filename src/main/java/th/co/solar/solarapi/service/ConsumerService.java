@@ -16,6 +16,8 @@ import java.util.Map;
 @Slf4j
 public class ConsumerService {
 
+    private final BigDecimal group = new BigDecimal("5");
+
     public Map<String, Object> processQueueTest() {
         // Get a reference to our posts
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -138,7 +140,7 @@ try {
                     if(LoadkwT_obj != null){
                         LoadkwT = convertObjectToBigDecimal(LoadkwT_obj);
                     }
-//                    log.info("gridkwTs1g1 : {}", gridkwT);
+                    log.info("gridkwTs1g1 : {}", gridkwT);
 //                    log.info("LoadkwTs1g1 : {}", LoadkwT);
 
                     gridkwTall[0] = gridkwTall[0].add(gridkwT);
@@ -167,7 +169,7 @@ try {
                                 if(LoadkwT_obj != null){
                                     LoadkwT = convertObjectToBigDecimal(LoadkwT_obj);
                                 }
-//                                log.info("gridkwTs1g2 : {}", gridkwT);
+                                log.info("gridkwTs1g2 : {}", gridkwT);
 //                                log.info("LoadkwTs1g2 : {}", LoadkwT);
 
                                 gridkwTall[0] = gridkwTall[0].add(gridkwT);
@@ -194,7 +196,7 @@ try {
                                             if(LoadkwT_obj != null){
                                                 LoadkwT = convertObjectToBigDecimal(LoadkwT_obj);
                                             }
-//                                            log.info("gridkwTs1g3 : {}", gridkwT);
+                                            log.info("gridkwTs1g3 : {}", gridkwT);
 //                                            log.info("LoadkwTs1g3 : {}", LoadkwT);
 
                                             gridkwTall[0] = gridkwTall[0].add(gridkwT);
@@ -221,7 +223,7 @@ try {
                                                         if(LoadkwT_obj != null){
                                                             LoadkwT = convertObjectToBigDecimal(LoadkwT_obj);
                                                         }
-//                                                        log.info("gridkwTs1g4 : {}", gridkwT);
+                                                        log.info("gridkwTs1g4 : {}", gridkwT);
 //                                                        log.info("LoadkwTs1g4 : {}", LoadkwT);
 
                                                         gridkwTall[0] = gridkwTall[0].add(gridkwT);
@@ -248,7 +250,7 @@ try {
                                                                     if(LoadkwT_obj != null){
                                                                         LoadkwT = convertObjectToBigDecimal(LoadkwT_obj);
                                                                     }
-//                                                                    log.info("gridkwTs1g5 : {}", gridkwT);
+                                                                    log.info("gridkwTs1g5 : {}", gridkwT);
 //                                                                    log.info("LoadkwTs1g5 : {}", LoadkwT);
 
                                                                     gridkwTall[0] = gridkwTall[0].add(gridkwT);
@@ -275,13 +277,13 @@ try {
                                                                                 if(LoadkwT_obj != null){
                                                                                     LoadkwT = convertObjectToBigDecimal(LoadkwT_obj);
                                                                                 }
-//                                                                                log.info("gridkwTs1g6 : {}", gridkwT);
+                                                                                log.info("gridkwTs1g6 : {}", gridkwT);
 //                                                                                log.info("LoadkwTs1g6 : {}", LoadkwT);
 
                                                                                 gridkwTall[0] = gridkwTall[0].add(gridkwT);
                                                                                 LoadkwTall[0] = LoadkwTall[0].add(LoadkwT);
 
-//                                                                                log.info("gridkwTall : {}", gridkwTall[0]);
+                                                                                log.info("gridkwTall : {}", gridkwTall[0]);
 //                                                                                log.info("LoadkwTall : {}", LoadkwTall[0]);
                                                                                 isStartRef1s1g6[0] = false;
                                                                                 // ParameterRealtime2S1G1
@@ -293,11 +295,6 @@ try {
                                                                                             Object obj = hashMapData.get("DataRealtime2S1G1");
                                                                                             if (obj == null) {
                                                                                                 return;
-                                                                                            }
-                                                                                            BigDecimal group = BigDecimal.ZERO;
-                                                                                            Object group_obj = hashMapData.get("group");
-                                                                                            if (group_obj != null) {
-                                                                                                group = convertObjectToBigDecimal(group_obj);
                                                                                             }
                                                                                             HashMap dataMap = (HashMap) obj;
                                                                                             BigDecimal solartotalinput = BigDecimal.ZERO;
@@ -348,11 +345,6 @@ try {
                                                                                                         if (obj == null) {
                                                                                                             return;
                                                                                                         }
-                                                                                                        BigDecimal group = BigDecimal.ZERO;
-                                                                                                        Object group_obj = hashMapData.get("group");
-                                                                                                        if (group_obj != null) {
-                                                                                                            group = convertObjectToBigDecimal(group_obj);
-                                                                                                        }
                                                                                                         HashMap dataMap = (HashMap) obj;
                                                                                                         BigDecimal solartotalinput = BigDecimal.ZERO;
                                                                                                         BigDecimal solartotaloutput = BigDecimal.ZERO;
@@ -401,11 +393,6 @@ try {
                                                                                                                     Object obj = hashMapData.get("DataRealtime2S1G3");
                                                                                                                     if (obj == null) {
                                                                                                                         return;
-                                                                                                                    }
-                                                                                                                    BigDecimal group = BigDecimal.ZERO;
-                                                                                                                    Object group_obj = hashMapData.get("group");
-                                                                                                                    if (group_obj != null) {
-                                                                                                                        group = convertObjectToBigDecimal(group_obj);
                                                                                                                     }
                                                                                                                     HashMap dataMap = (HashMap) obj;
                                                                                                                     BigDecimal solartotalinput = BigDecimal.ZERO;
@@ -456,11 +443,6 @@ try {
                                                                                                                                 if (obj == null) {
                                                                                                                                     return;
                                                                                                                                 }
-                                                                                                                                BigDecimal group = BigDecimal.ZERO;
-                                                                                                                                Object group_obj = hashMapData.get("group");
-                                                                                                                                if (group_obj != null) {
-                                                                                                                                    group = convertObjectToBigDecimal(group_obj);
-                                                                                                                                }
                                                                                                                                 HashMap dataMap = (HashMap) obj;
                                                                                                                                 BigDecimal solartotalinput = BigDecimal.ZERO;
                                                                                                                                 BigDecimal solartotaloutput = BigDecimal.ZERO;
@@ -510,11 +492,6 @@ try {
                                                                                                                                             if (obj == null) {
                                                                                                                                                 return;
                                                                                                                                             }
-                                                                                                                                            BigDecimal group = BigDecimal.ZERO;
-                                                                                                                                            Object group_obj = hashMapData.get("group");
-                                                                                                                                            if (group_obj != null) {
-                                                                                                                                                group = convertObjectToBigDecimal(group_obj);
-                                                                                                                                            }
                                                                                                                                             HashMap dataMap = (HashMap) obj;
                                                                                                                                             BigDecimal solartotalinput = BigDecimal.ZERO;
                                                                                                                                             BigDecimal solartotaloutput = BigDecimal.ZERO;
@@ -563,12 +540,6 @@ try {
                                                                                                                                                         Object obj = hashMapData.get("DataRealtime2S1G6");
                                                                                                                                                         if (obj == null) {
                                                                                                                                                             return;
-                                                                                                                                                        }
-                                                                                                                                                        BigDecimal group = BigDecimal.ONE;
-                                                                                                                                                        Object group_obj = hashMapData.get("group");
-                                                                                                                                                        if (group_obj != null) {
-                                                                                                                                                            group = convertObjectToBigDecimal(group_obj);
-                                                                                                                                                            group = (group.equals(BigDecimal.ZERO))?BigDecimal.ONE:group;
                                                                                                                                                         }
                                                                                                                                                         HashMap dataMap = (HashMap) obj;
                                                                                                                                                         BigDecimal solartotalinput = BigDecimal.ZERO;
